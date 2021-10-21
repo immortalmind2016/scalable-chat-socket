@@ -1,0 +1,37 @@
+<html>
+    <body>
+        <script type="module">
+            import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
+            const socket = io("http://localhost:3000");
+            document.getElementById("join").onclick=()=>{ const room=document.getElementById("room").value
+            const user=document.getElementById("name").value
+            socket.emit("join",{room,user})
+            document.getElementById("joinForm").style.display="none"
+            document.getElementById("room-intro").style.display="inline"
+            document.getElementById("room-intro").style.textAlign="center"
+            document.getElementById("room-intro").innerHTML=`<h1>Welcome to ${room} room </2>`
+            document.getElementById("incoming").style.display="inline"
+
+
+        }
+        let userList=document.getElementById("room-users")
+          
+        socket.on("join",(user)=>{
+            const li=document.createElement("li")
+            li.innerText=user
+            userList.appendChild(li)
+            })
+          </script>
+        <div id="room-intro">
+            
+        </div>
+          <div id="joinForm">
+            <input id="room" placeholder="room name.." />
+            <input  id="name" placeholder="your name.." />
+            <button  id="join">Join</button>
+          </div>
+          <p id="incoming" style="display:none"> incoming users </p>
+            <ul id="room-users"></il>
+          
+    </body>
+</html>
