@@ -31,15 +31,18 @@ socket.on("join",({room,user})=>{
     socket.join(room)
 
     io.to(room).emit("join",user)
-    publisher.publish("join-from-2-to-1", JSON.stringify({room,user}));
+    publisher.publish("join-from-2", JSON.stringify({room,user}));
   }catch(e){
       console.log(e)
   }
 })
 });
+
+const channels=["join-from-1"]
+
 subscriber.on('message',(channel,message)=>{
     console.log({message,channel})
-    if(channel=="join-from-1-to-2")
+    if(channels.includes(channel))
    {
     const {room,user}=JSON.parse(message)
     console.log("SUBSCRIP ",room,user)
@@ -48,7 +51,7 @@ subscriber.on('message',(channel,message)=>{
 })
 
 httpServer.listen(3001)
-subscriber.subscribe("join-from-1-to-2")
+subscriber.subscribe(channels)
 
 
 
